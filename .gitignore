@@ -1,0 +1,12 @@
+node_modules
+dist
+docker.tar.gz
+.idea
+.DS_Store
+images/*
+*.log
+.vscode
+.nyc_output
+coverage
+test-reports
+tags
