@@ -3,7 +3,7 @@ import { Either } from 'fp-ts/lib/Either';
 
 interface HttpResponse {
   status?: number;
-  headers: Record<string, string>;
+  headers?: Record<string, string>;
 }
 
 export interface HttpError extends HttpResponse {

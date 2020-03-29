@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { configureRoutes } from 'core/routing';
+import { configureRoutes } from 'app/routes';
 import { configureMiddlewares } from 'app/middlewares';
 
 export const createApplication = (): express.Application => {
