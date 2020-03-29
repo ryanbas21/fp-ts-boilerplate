@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Either } from 'fp-ts/lib/Either';
+import { TaskEither } from 'fp-ts/lib/TaskEither';
 
 interface HttpResponse {
   status?: number;
@@ -10,8 +10,8 @@ export interface HttpError extends HttpResponse {
   message: string;
 }
 
-export interface HttpResult extends HttpResponse {
-  content?: string;
+export interface HttpResult<T> extends HttpResponse {
+  content?: T;
   redirectTo?: string;
 }
 
@@ -24,4 +24,4 @@ export enum HttpMethod {
   OPTIONS = 'options',
 }
 
-export type RequestHandler = (req: Request) => Either<HttpError, HttpResult>;
+export type RequestHandler<T> = (req: Request) => TaskEither<HttpError, HttpResult<T>>;
