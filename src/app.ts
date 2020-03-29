@@ -1,4 +1,12 @@
 import * as express from 'express'
-import { corsMiddleware, jsonMiddleware } from 'app/middlewares'
+import { configureRoutes } from 'core/routing';
+import { configureMiddlewares } from 'app/middlewares';
 
-const app: express.Application = express();
+export const createApplication = (): express.Application => {
+    const app: express.Application = express();
+
+    configureRoutes(app);
+    configureMiddlewares(app);
+
+    return app;
+}
