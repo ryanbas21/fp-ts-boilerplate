@@ -7,10 +7,26 @@
   },
   "plugins": [
     "@typescript-eslint",
+    "import",
     "jest"
   ],
   "extends": [
     "airbnb-typescript",
     "plugin:jest/recommended"
-  ]
+  ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      },
+      "typescript": {}
+    }
+  },
+    "rules": {
+      "no-dupe-class-members": "off",
+      "@typescript-eslint/no-dupe-class-members": "off"
+  }
 }

@@ -6,4 +6,4 @@ export const configureRoutes = (app: Application): void => {
   registerTaskRoutes(router);
 
   app.use('/api/v1', router);
-}
+};
