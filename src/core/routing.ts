@@ -7,20 +7,20 @@ import {
 
 export type Route = [HttpMethod, string, RequestHandler<unknown>];
 
-export const handleResult = <T>(handler: RequestHandler<T>) => async (req: Request, res: Response): Promise<void> => {
+const sendErrorResponse = (res: Response) => (error: HttpError) => {
+  const status = error.status || 500;
+  res.status(status).send({ message: error.message });
+};
+
+const sendSuccessResponse = <T>(res: Response) => (result: HttpResult<T>) => {
+  res.status(result.status).json(result.content);
+};
+
+export const handleResult = <T>(handler: RequestHandler<T>) =>
+  async (req: Request, res: Response): Promise<void> => {
+
   const result = handler(req);
-
-  const onError = (error: HttpError) => {
-    const status = error.status || 500;
-    res.status(status).send({ message: error.message });
-  };
-
-  const onSuccess = (result: HttpResult<T>) => {
-    res.status(result.status).json(result.content);
-  };
-
-  const sendResponseFor = fold(onError, onSuccess);
-
+  const sendResponseFor = fold(sendErrorResponse(res), sendSuccessResponse(res));
   sendResponseFor(await result());
 };
 

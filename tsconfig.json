@@ -10,10 +10,13 @@
     "baseUrl": ".",
     "paths": {
       "app/*": ["./src/*"],
-      "core/*": ["./src/core/*"]
+      "tests/*": ["./tests/*"],
+      "core/*": ["./src/core/*"],
+      "tasks/*": ["./src/tasks/*"]
     }
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "tests/**/*"
   ]
 }

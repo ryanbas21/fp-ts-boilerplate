@@ -4,7 +4,7 @@ import { HttpMethod } from 'core/http/dtos';
 import { list } from 'app/task/handlers';
 
 const routes: Route[] = [
-  [HttpMethod.GET, '/', list],
+  [HttpMethod.GET, '/tasks', list],
 ];
 
 export default (router: Router): void => {

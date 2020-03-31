@@ -24,4 +24,4 @@ export enum HttpMethod {
   OPTIONS = 'options',
 }
 
-export type RequestHandler<T> = (req: Request) => TaskEither<HttpError, HttpResult<T>>;
+export type RequestHandler<T> = (req: Partial<Request>) => TaskEither<HttpError, HttpResult<T>>;
