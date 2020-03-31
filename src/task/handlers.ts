@@ -1,7 +1,7 @@
 import { Request } from 'express';
 import { RequestHandler, HttpResult, HttpError } from 'core/http/dtos';
-import { listAll } from './repository';
 import { TaskEither, bimap } from 'fp-ts/lib/TaskEither';
+import { listAll } from './repository';
 import { Task } from './model';
 
 export const list: RequestHandler<Task[]> = (_req: Request): TaskEither<HttpError, HttpResult<Task[]>> => {
@@ -10,4 +10,4 @@ export const list: RequestHandler<Task[]> = (_req: Request): TaskEither<HttpErro
 
   const handleResult = bimap(failureCase, successCase);
   return handleResult(listAll);
-}
+};

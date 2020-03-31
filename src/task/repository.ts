@@ -8,7 +8,7 @@ const TaskSchema = new Schema({
   completed: Boolean,
 });
 
-function modelToDto (doc: Document) {
+function modelToDto(doc: Document) {
   const { _id: id, ...rest } = doc.toObject();
   return { ...rest, id };
 }
