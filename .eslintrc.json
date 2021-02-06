@@ -12,7 +12,9 @@
   ],
   "extends": [
     "airbnb-typescript",
-    "plugin:jest/recommended"
+    "plugin:jest/recommended",
+    "prettier",
+    "prettier/@typescript-eslint"
   ],
   "settings": {
     "import/parsers": {
@@ -27,6 +29,7 @@
   },
     "rules": {
       "no-dupe-class-members": "off",
-      "@typescript-eslint/no-dupe-class-members": "off"
+      "@typescript-eslint/no-dupe-class-members": "off",
+      "import/prefer-default-export": 0
   }
 }
