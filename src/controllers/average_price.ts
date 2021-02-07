@@ -1,22 +1,33 @@
 import { Request, Response } from "express";
-// import { encaseP, fork } from 'fluture';
-// import { pipe } from "fp-ts/lib/function";
 import * as TE from "fp-ts/lib/TaskEither";
-// import * as T from "fp-ts/lib/Task";
+import * as T from "fp-ts/lib/Task";
+import { ParsedQs } from 'qs';
 import axios, { AxiosResponse } from "axios";
+import { absurd, pipe } from "fp-ts/lib/function";
 
-const {basename} = process.env;
+const { basename } = process.env;
 
-// const get = encaseP(axios.get);
-function getPrice(sym: any): TE.TaskEither<any, Promise<AxiosResponse<any>>> {
-  return TE.of(axios.get(`${basename}/api/v3/avgPrice?symbol=${sym}`));
+function getPrice(sym: string | ParsedQs) {
+  return axios.get(`${basename}/api/v3/avgPrice?symbol=${sym}`)
 }
-
-function averagePrice(req: Request, res: Response) {
-  const { sym } = req.query;
-  getPrice(sym).fold(console.error, console.log);
-  res.send(data);
-  
+function handleQueryParams(req: Request) {
+  if (!Array.isArray(req.query)) {
+    return req.query.sym;
+  } else {
+    return req.query.includes('sym') && req.query.filter(symbol => symbol === 'sym')[0];
+  }
 }
-
-export { averagePrice };
+export async function averagePrice(req: Request, res: Response) {
+  return pipe(
+    handleQueryParams(req),
+    (sym) => TE.tryCatch(
+      async () => getPrice(sym),
+      (e: Error) => new Error('invalid call ' + e.message),
+    ),
+    TE.map((resp: AxiosResponse) => resp.data),
+    TE.fold(
+      absurd,
+      (data) => T.of(res.send(data)),
+    )
+  )();
+}

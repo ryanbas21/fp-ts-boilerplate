@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "start:dev": "ts-node -r tsconfig-paths/register -r dotenv/config src/index.ts",
-    "start:watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node -r tsconfig-paths/register -r dotenv/config' src/index.ts",
+    "start:watch": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'npx ts-node -r tsconfig-paths/register -r dotenv/config' src/index.ts",
     "lint": "eslint . --ext .ts,.tsx --quiet --fix",
     "tsc:watch": "tsc --watch",
     "build": "tsc"
