@@ -1,9 +1,12 @@
+import { signRequest } from 'app/utils/signing';
+import axios, { AxiosResponse } from 'axios';
 import { Request, Response } from 'express';
 import { pipe } from 'fp-ts/lib/pipeable';
 import * as T from 'fp-ts/lib/Task';
 import { handleQueryParams } from '../utils';
 import { averagePrice } from './average_price';
 
+const { basename, BINANCE_API } = process.env;
 const TestOrder = '/api/v3/order/test';
 type SIDE = 'BUY' | 'SELL';
 type OrderType = 'LIMIT' | 'STOP' | 'MARKET' | 'STOP_LOSS_LIMIT' | 'TAKE_PROFIT' | 'TAKE_PROFIT_LIMIT';
@@ -45,15 +48,25 @@ async function calculateQuantity(req: Request, res: Response) {
 
 async function createOrder(req: Request, res: Response) {
   const symbol = handleQueryParams(req);
-  console.log(symbol);
+  const { serverTime: timestamp }:{ serverTime: number } = await axios.get("https://api.binance.com/api/v1/time").then(({ data }) => data);
   const quantity = await calculateQuantity(req, res);
-  console.log(quantity);
   const order = {
     symbol,
-    side: 'GTC',
+    side: 'BUY',
+    timeInForce: 'GTC',
     type: 'MARKET',
-    quantity: calculateQuantity(req, res),
+    timestamp,
+    quantity,
   }; 
+  const signature = signRequest(order);
+  await axios.post(`${basename}${TestOrder}?signature=${signature}`, order, {
+    headers: {
+      'X-MBX-APIKEY': BINANCE_API
+    }
+  })
+  .then(console.log)
+  .catch(console.log)
+  
 }
 
 export { createOrder };

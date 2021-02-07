@@ -1,12 +1,14 @@
-import crypto from 'crypto';
+import * as crypto from 'crypto';
+import * as qs from 'querystring';
 
 const { BINANCE_SECRET } = process.env
 
-function signRequest(): string {
-  const time = Date.now();
-  const query_string = `timestamp=${time}`;
+function signRequest(payload): string {
+  const querystring = qs.stringify(payload);
   return crypto
-          .createHmac('sha256', BINANCE_SECRET)
-          .update(query_string)
+          .createHmac('SHA256', BINANCE_SECRET)
+          .update(querystring)
           .digest('hex')
 }
+
+export { signRequest };
