@@ -3,12 +3,20 @@ import * as qs from 'querystring';
 
 const { BINANCE_SECRET } = process.env
 
-function signRequest(payload): string {
+interface SignedRequest {
+  querystring: string;
+  signature: string;
+}
+
+function signRequest(payload): SignedRequest {
   const querystring = qs.stringify(payload);
-  return crypto
-          .createHmac('SHA256', BINANCE_SECRET)
-          .update(querystring)
-          .digest('hex')
+  return { 
+    querystring, 
+    signature: crypto
+                  .createHmac('SHA256', BINANCE_SECRET)
+                  .update(querystring)
+                  .digest('hex')
+  };
 }
 
 export { signRequest };

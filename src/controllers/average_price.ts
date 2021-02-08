@@ -12,12 +12,12 @@ async function getPrice(sym: string | ParsedQs) {
   return axios.get(`${basename}/api/v3/avgPrice?symbol=${sym}`)
 }
 
-export async function averagePrice(req: Request, res: Response) {
+export async function averagePrice(req: Request)  {
   return pipe(
     handleQueryParams(req),
     (sym) => TE.tryCatch(
       async () => getPrice(sym),
-      (e: Error) => new Error('invalid call ' + e.message),
+      (e: Error) => new Error(e.message),
     ),
     TE.map((resp: AxiosResponse) => resp.data)
   )();
@@ -25,10 +25,10 @@ export async function averagePrice(req: Request, res: Response) {
 
 export function handleAveragePrice(req: Request, res: Response) {
   return pipe(
-    async () => averagePrice(req, res),
+    async () => averagePrice(req),
     TE.fold(
-      absurd,
-      data => T.of(res.send(data))
+      absurd, 
+      data => T.of(res.send(data)),
     ),
   )();
 }
